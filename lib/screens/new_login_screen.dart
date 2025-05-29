@@ -72,8 +72,8 @@ class _NewLoginScreenState extends State<NewLoginScreen>
           SnackBar(content: Text('Bienvenido, $userName')),
         );
 
-        // Navega al Dashboard
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        // Navega a la pantalla principal
+        Navigator.pushReplacementNamed(context, '/main');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Credenciales inválidas')),

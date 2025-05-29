@@ -177,16 +177,37 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   ? FadeIn(
                       delay: const Duration(milliseconds: 400),
                       duration: const Duration(milliseconds: 1000),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        child: const CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          strokeWidth: 3,
-                        ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            child: const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 3,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Cargando...',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1.1,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 3,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     )
-                  : const SizedBox(height: 40),
+                  : const SizedBox(height: 52),
               ],
             ),
           ),
