@@ -32,7 +32,6 @@ class EstanqueDetailScreen extends StatelessWidget {
                   _buildAlertSystem(isSmallScreen),
                   _buildCameraSection(isSmallScreen),
                   _buildWaterParameters(isSmallScreen),
-                  _buildChemicalAnalysis(isSmallScreen),
                   _buildFishInfo(isSmallScreen),
                   _buildActionButtons(context, isSmallScreen),
                   const SizedBox(height: 24),
@@ -46,60 +45,105 @@ class EstanqueDetailScreen extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, bool isSmallScreen) {
-    return Container(
-      padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
-      color: const Color(0xFF0F4C75),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white.withOpacity(0.3)),
-                  ),
-                  child: const Icon(Icons.arrow_back, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: isSmallScreen ? 12 : 16),
-          Text(
-            'Estanque $estanqueNumber',
-            style: TextStyle(
-              fontSize: isSmallScreen ? 24 : 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF0F4C75), Color(0xFF3282B8)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
           ),
-          const SizedBox(height: 4),
-          Row(
+          padding: EdgeInsets.only(
+            left: isSmallScreen ? 8 : 16,
+            right: isSmallScreen ? 8 : 16,
+            top: isSmallScreen ? 16 : 32,
+            bottom: isSmallScreen ? 16 : 24,
+          ),
+          child: Row(
             children: [
-              Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(3),
+              InkWell(
+                onTap: () => Navigator.pop(context),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 22),
                 ),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '$centralName • $salaName',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: isSmallScreen ? 12 : 14,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: isSmallScreen ? 10 : 16,
+                    horizontal: isSmallScreen ? 12 : 20,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.10),
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.07),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Estanque $estanqueNumber',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isSmallScreen ? 22 : 26,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.greenAccent,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              '$centralName • $salaName',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: isSmallScreen ? 12 : 14,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -346,39 +390,43 @@ class EstanqueDetailScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: isSmallScreen ? 16 : 20),
-            Wrap(
-              spacing: isSmallScreen ? 8 : 12,
-              runSpacing: isSmallScreen ? 8 : 12,
-              children: [
-                _buildParameterCard(
-                  'Temperatura',
-                  '24.5°C',
-                  Icons.thermostat,
-                  const Color(0xFFF97316),
-                  isSmallScreen,
-                ),
-                _buildParameterCard(
-                  'Oxígeno',
-                  '6.8 mg/L',
-                  Icons.air,
-                  const Color(0xFF0F4C75),
-                  isSmallScreen,
-                ),
-                _buildParameterCard(
-                  'pH',
-                  '7.2',
-                  Icons.science,
-                  const Color(0xFF7C3AED),
-                  isSmallScreen,
-                ),
-                _buildParameterCard(
-                  'Turbidez',
-                  '2.1 NTU',
-                  Icons.blur_on,
-                  const Color(0xFF22C55E),
-                  isSmallScreen,
-                ),
-              ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _waterParamCard(
+                    icon: Icons.thermostat,
+                    label: 'Temp',
+                    value: '24.5°C',
+                    color: const Color(0xFFF97316),
+                    isSmallScreen: isSmallScreen,
+                  ),
+                  SizedBox(width: isSmallScreen ? 8 : 16),
+                  _waterParamCard(
+                    icon: Icons.air,
+                    label: 'O₂',
+                    value: '6.8 mg/L',
+                    color: const Color(0xFF0F4C75),
+                    isSmallScreen: isSmallScreen,
+                  ),
+                  SizedBox(width: isSmallScreen ? 8 : 16),
+                  _waterParamCard(
+                    icon: Icons.science,
+                    label: 'pH',
+                    value: '7.2',
+                    color: const Color(0xFF7C3AED),
+                    isSmallScreen: isSmallScreen,
+                  ),
+                  SizedBox(width: isSmallScreen ? 8 : 16),
+                  _waterParamCard(
+                    icon: Icons.blur_on,
+                    label: 'Turbidez',
+                    value: '2.1 NTU',
+                    color: const Color(0xFF22C55E),
+                    isSmallScreen: isSmallScreen,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -386,148 +434,48 @@ class EstanqueDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildParameterCard(String label, String value, IconData icon, Color color, bool isSmallScreen) {
+  Widget _waterParamCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+    required bool isSmallScreen,
+  }) {
     return Container(
-      width: isSmallScreen ? 140 : 160,
-      padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+      width: isSmallScreen ? 80 : 100,
+      padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 14, horizontal: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        color: color.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withOpacity(0.18)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
+            color: color.withOpacity(0.07),
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: isSmallScreen ? 20 : 24),
-          SizedBox(height: isSmallScreen ? 6 : 8),
+          Icon(icon, color: color, size: isSmallScreen ? 22 : 28),
+          const SizedBox(height: 6),
           Text(
             value,
             style: TextStyle(
               color: const Color(0xFF1F2937),
-              fontSize: isSmallScreen ? 18 : 20,
+              fontSize: isSmallScreen ? 15 : 17,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             label,
             style: TextStyle(
-              color: const Color(0xFF6B7280),
-              fontSize: isSmallScreen ? 11 : 12,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildChemicalAnalysis(bool isSmallScreen) {
-    return Card(
-      margin: EdgeInsets.only(bottom: isSmallScreen ? 16 : 24),
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF7C3AED).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.science, color: Color(0xFF7C3AED)),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  'Análisis Químico',
-                  style: TextStyle(
-                    color: const Color(0xFF1F2937),
-                    fontSize: isSmallScreen ? 16 : 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: isSmallScreen ? 16 : 20),
-            _buildChemicalItem('Amonio', '0.5 mg/L', 'Normal', const Color(0xFF22C55E), isSmallScreen),
-            SizedBox(height: isSmallScreen ? 12 : 16),
-            _buildChemicalItem('Nitritos', '0.1 mg/L', 'Normal', const Color(0xFF22C55E), isSmallScreen),
-            SizedBox(height: isSmallScreen ? 12 : 16),
-            _buildChemicalItem('Nitratos', '5.0 mg/L', 'Normal', const Color(0xFF22C55E), isSmallScreen),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChemicalItem(String label, String value, String status, Color statusColor, bool isSmallScreen) {
-    return Container(
-      padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: statusColor.withOpacity(0.3)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  color: const Color(0xFF6B7280),
-                  fontSize: isSmallScreen ? 12 : 14,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: TextStyle(
-                  color: const Color(0xFF1F2937),
-                  fontSize: isSmallScreen ? 16 : 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: isSmallScreen ? 8 : 12,
-              vertical: isSmallScreen ? 4 : 6,
-            ),
-            decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              status,
-              style: TextStyle(
-                color: statusColor,
-                fontSize: isSmallScreen ? 12 : 14,
-                fontWeight: FontWeight.bold,
-              ),
+              color: color,
+              fontSize: isSmallScreen ? 11 : 13,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
