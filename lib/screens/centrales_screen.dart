@@ -8,13 +8,15 @@ class CentralesScreen extends StatefulWidget {
   State<CentralesScreen> createState() => _CentralesScreenState();
 }
 
-class _CentralesScreenState extends State<CentralesScreen> {
+class _CentralesScreenState extends State<CentralesScreen> with SingleTickerProviderStateMixin {
   String _selectedCentral = 'Copihue';
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   final Map<String, Map<String, dynamic>> _centralesData = {
     'Copihue': {
       'name': 'Copihue',
-      'color': const Color(0xFF0F4C75),
+      'color': const Color(0xFF00B4D8), // Azul principal
       'salas': [
         {'name': 'Sala 1', 'status': 'active'},
         {'name': 'Sala 2', 'status': 'active'},
@@ -22,7 +24,7 @@ class _CentralesScreenState extends State<CentralesScreen> {
     },
     'Calabozo': {
       'name': 'Calabozo',
-      'color': const Color(0xFF059669),
+      'color': const Color(0xFF0077B6), // Azul medio
       'salas': [
         {'name': 'Sala A', 'status': 'active'},
         {'name': 'Sala B', 'status': 'active'},
@@ -30,13 +32,29 @@ class _CentralesScreenState extends State<CentralesScreen> {
     },
     'Trainel': {
       'name': 'Trainel',
-      'color': const Color(0xFF7C3AED),
+      'color': const Color(0xFF0096C7), // Azul claro
       'salas': [
         {'name': 'Sala Norte', 'status': 'active'},
         {'name': 'Sala Sur', 'status': 'active'},
       ]
     },
   };
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +191,59 @@ class _CentralesScreenState extends State<CentralesScreen> {
       {'temp': '22.8°C', 'o2': '7.5', 'ph': '7.0', 'status': 'good'},
     ];
 
+    // Lista de colores en tonos azules
+    final List<Color> borderColors = [
+      const Color(0xFF00B4D8), // Azul principal
+      const Color(0xFF0077B6), // Azul medio
+      const Color(0xFF0096C7), // Azul claro
+      const Color(0xFF023E8A), // Azul oscuro
+      const Color(0xFF48CAE4), // Azul cielo
+      const Color(0xFF90E0EF), // Azul pastel
+    ];
+
+    // Seleccionar un color aleatorio para el borde
+    final Color borderColor = borderColors[sala['name'].hashCode % borderColors.length];
+
+    // Gradientes en tonos azules para cada color
+    final Map<Color, List<Color>> colorGradients = {
+      const Color(0xFF00B4D8): [
+        const Color(0xFF00B4D8),
+        const Color(0xFF48CAE4),
+        const Color(0xFF90E0EF),
+      ],
+      const Color(0xFF0077B6): [
+        const Color(0xFF0077B6),
+        const Color(0xFF0096C7),
+        const Color(0xFF00B4D8),
+      ],
+      const Color(0xFF0096C7): [
+        const Color(0xFF0096C7),
+        const Color(0xFF00B4D8),
+        const Color(0xFF48CAE4),
+      ],
+      const Color(0xFF023E8A): [
+        const Color(0xFF023E8A),
+        const Color(0xFF0077B6),
+        const Color(0xFF0096C7),
+      ],
+      const Color(0xFF48CAE4): [
+        const Color(0xFF48CAE4),
+        const Color(0xFF90E0EF),
+        const Color(0xFFCAF0F8),
+      ],
+      const Color(0xFF90E0EF): [
+        const Color(0xFF90E0EF),
+        const Color(0xFFCAF0F8),
+        const Color(0xFFE0F7FF),
+      ],
+    };
+
+    final List<Color> gradientColors = colorGradients[borderColor] ?? [
+      borderColor,
+      borderColor.withOpacity(0.7),
+      borderColor.withOpacity(0.4),
+    ];
+
     int totalEstanques = estanques.length;
     int estanquesActivos = estanques.where((e) => e['status'] == 'good').length;
     int estanquesWarning = estanques.where((e) => e['status'] == 'warning').length;
@@ -190,109 +261,137 @@ class _CentralesScreenState extends State<CentralesScreen> {
           ),
         );
       },
-      child: Card(
-        margin: EdgeInsets.only(bottom: isSmallScreen ? 12 : 16),
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0F4C75),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return Container(
+            margin: EdgeInsets.only(bottom: isSmallScreen ? 12 : 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: gradientColors.map((color) => 
+                  color.withOpacity(0.8 + (_animation.value * 0.2))
+                ).toList(),
+                stops: const [0.0, 0.5, 1.0],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: borderColor.withOpacity(0.3 + (_animation.value * 0.2)),
+                  blurRadius: 12,
+                  spreadRadius: 3,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+                      decoration: BoxDecoration(
+                        color: borderColor,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            sala['name'],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: isSmallScreen ? 16 : 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isSmallScreen ? 8 : 12,
+                              vertical: isSmallScreen ? 4 : 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              sala['status'] == 'active' ? 'ACTIVO' : 'INACTIVO',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isSmallScreen ? 10 : 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Resumen de Estanques',
+                            style: TextStyle(
+                              color: const Color(0xFF1F2937),
+                              fontSize: isSmallScreen ? 14 : 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: isSmallScreen ? 8 : 12),
+                          Wrap(
+                            spacing: isSmallScreen ? 8 : 12,
+                            runSpacing: isSmallScreen ? 8 : 12,
+                            children: [
+                              _buildInfoCard(
+                                'Total',
+                                totalEstanques.toString(),
+                                Icons.water,
+                                const Color(0xFF0F4C75),
+                                isSmallScreen,
+                              ),
+                              _buildInfoCard(
+                                'Activos',
+                                estanquesActivos.toString(),
+                                Icons.check_circle,
+                                const Color(0xFF22C55E),
+                                isSmallScreen,
+                              ),
+                              _buildInfoCard(
+                                'Atención',
+                                estanquesWarning.toString(),
+                                Icons.warning,
+                                const Color(0xFFF97316),
+                                isSmallScreen,
+                              ),
+                              _buildInfoCard(
+                                'Críticos',
+                                estanquesCritical.toString(),
+                                Icons.error,
+                                const Color(0xFFEF4444),
+                                isSmallScreen,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    sala['name'],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: isSmallScreen ? 16 : 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isSmallScreen ? 8 : 12,
-                      vertical: isSmallScreen ? 4 : 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      sala['status'] == 'active' ? 'ACTIVO' : 'INACTIVO',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: isSmallScreen ? 10 : 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
-            Padding(
-              padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Resumen de Estanques',
-                    style: TextStyle(
-                      color: const Color(0xFF1F2937),
-                      fontSize: isSmallScreen ? 14 : 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: isSmallScreen ? 8 : 12),
-                  Wrap(
-                    spacing: isSmallScreen ? 8 : 12,
-                    runSpacing: isSmallScreen ? 8 : 12,
-                    children: [
-                      _buildInfoCard(
-                        'Total',
-                        totalEstanques.toString(),
-                        Icons.water,
-                        const Color(0xFF0F4C75),
-                        isSmallScreen,
-                      ),
-                      _buildInfoCard(
-                        'Activos',
-                        estanquesActivos.toString(),
-                        Icons.check_circle,
-                        const Color(0xFF22C55E),
-                        isSmallScreen,
-                      ),
-                      _buildInfoCard(
-                        'Atención',
-                        estanquesWarning.toString(),
-                        Icons.warning,
-                        const Color(0xFFF97316),
-                        isSmallScreen,
-                      ),
-                      _buildInfoCard(
-                        'Críticos',
-                        estanquesCritical.toString(),
-                        Icons.error,
-                        const Color(0xFFEF4444),
-                        isSmallScreen,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
