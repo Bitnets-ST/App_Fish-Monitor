@@ -45,96 +45,106 @@ class EstanqueDetailScreen extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, bool isSmallScreen) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF0F4C75), Color(0xFF3282B8)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          padding: EdgeInsets.only(
-            left: isSmallScreen ? 8 : 16,
-            right: isSmallScreen ? 8 : 16,
-            top: isSmallScreen ? 16 : 32,
-            bottom: isSmallScreen ? 16 : 24,
-          ),
-          child: Row(
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF0F4C75), Color(0xFF3282B8)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      padding: EdgeInsets.only(
+        left: isSmallScreen ? 12 : 20,
+        right: isSmallScreen ? 12 : 20,
+        top: isSmallScreen ? 20 : 32,
+        bottom: isSmallScreen ? 20 : 32,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
               InkWell(
                 onTap: () => Navigator.pop(context),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 22),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    vertical: isSmallScreen ? 10 : 16,
-                    horizontal: isSmallScreen ? 12 : 20,
+                    vertical: isSmallScreen ? 12 : 16,
+                    horizontal: isSmallScreen ? 16 : 20,
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.10),
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.07),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1.5,
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Text(
-                        'Estanque $estanqueNumber',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: isSmallScreen ? 22 : 26,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.3),
+                            width: 1,
+                          ),
                         ),
+                        child: const Icon(Icons.water_drop_rounded, color: Colors.white, size: 22),
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.greenAccent,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              '$centralName • $salaName',
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Estanque $estanqueNumber',
                               style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: isSmallScreen ? 12 : 14,
+                                color: Colors.white,
+                                fontSize: isSmallScreen ? 20 : 24,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 6,
+                                  height: 6,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.greenAccent,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    '$centralName • $salaName',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: isSmallScreen ? 12 : 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -142,8 +152,8 @@ class EstanqueDetailScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
