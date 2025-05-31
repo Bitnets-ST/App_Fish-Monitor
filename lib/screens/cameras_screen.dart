@@ -165,15 +165,15 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
 
               // Central Selection Tabs
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(12),
                     color: Colors.white.withOpacity(0.2),
                   ),
                   labelColor: Colors.white,
@@ -185,10 +185,10 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
               // Content
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: TabBarView(
                     controller: _tabController,
@@ -209,12 +209,12 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
     final rooms = _roomsByCentral[central] ?? [];
     
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       itemCount: rooms.length,
       itemBuilder: (context, index) {
         final room = rooms[index];
         return Container(
-          margin: const EdgeInsets.only(bottom: 16),
+          margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -224,12 +224,12 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                 const Color(0xFF2E86AB).withOpacity(0.1),
               ],
             ),
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
@@ -239,27 +239,27 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
               onTap: () {
                 _showRoomCameras(context, room);
               },
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(12),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: const Color(0xFF0F4C75).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
                             Icons.videocam,
                             color: Color(0xFF0F4C75),
-                            size: 24,
+                            size: 20,
                           ),
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,16 +267,16 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                               Text(
                                 room['name'],
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF0F4C75),
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 2),
                               Text(
                                 '${(room['cameras'] as List).length} Cámaras • ${room['status']}',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   color: Colors.grey[600],
                                 ),
                               ),
@@ -285,19 +285,19 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+                            horizontal: 8,
+                            vertical: 4,
                           ),
                           decoration: BoxDecoration(
                             color: room['status'] == 'Activa'
                                 ? const Color(0xFF4CAF50).withOpacity(0.1)
                                 : const Color(0xFFE74C3C).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             room['status'],
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 11,
                               fontWeight: FontWeight.bold,
                               color: room['status'] == 'Activa'
                                   ? const Color(0xFF4CAF50)
@@ -307,7 +307,7 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         ...(room['cameras'] as List).map((camera) {
@@ -326,31 +326,31 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                               statusColor = Colors.grey;
                           }
                           return Container(
-                            margin: const EdgeInsets.only(right: 8),
+                            margin: const EdgeInsets.only(right: 6),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
+                              horizontal: 6,
+                              vertical: 3,
                             ),
                             decoration: BoxDecoration(
                               color: statusColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
-                                  width: 8,
-                                  height: 8,
+                                  width: 6,
+                                  height: 6,
                                   decoration: BoxDecoration(
                                     color: statusColor,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+                                const SizedBox(width: 3),
                                 Text(
                                   camera['name'],
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     color: statusColor,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -381,25 +381,25 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
           ),
         ),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -5),
+                    blurRadius: 8,
+                    offset: const Offset(0, -4),
                   ),
                 ],
               ),
@@ -408,20 +408,20 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                   const Icon(
                     Icons.videocam,
                     color: Color(0xFF0F4C75),
-                    size: 24,
+                    size: 20,
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 8),
                   Text(
                     room['name'],
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF0F4C75),
                     ),
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: const Icon(Icons.close, size: 20),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -429,11 +429,11 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
             ),
             Expanded(
               child: GridView.builder(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
                   childAspectRatio: 16 / 9,
                 ),
                 itemCount: (room['cameras'] as List).length,
@@ -461,12 +461,12 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                   return Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
@@ -477,39 +477,39 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                             decoration: BoxDecoration(
                               color: Colors.grey[300],
                               borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
                               ),
                             ),
                             child: Center(
                               child: Icon(
                                 Icons.videocam,
-                                size: 40,
+                                size: 32,
                                 color: Colors.grey[400],
                               ),
                             ),
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: statusColor.withOpacity(0.1),
                             borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(12),
-                              bottomRight: Radius.circular(12),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
                             ),
                           ),
                           child: Row(
                             children: [
                               Container(
-                                width: 8,
-                                height: 8,
+                                width: 6,
+                                height: 6,
                                 decoration: BoxDecoration(
                                   color: statusColor,
                                   shape: BoxShape.circle,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 6),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -517,7 +517,7 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                                     Text(
                                       camera['name'],
                                       style: const TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF0F4C75),
                                       ),
@@ -525,7 +525,7 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                                     Text(
                                       '$statusText • ${camera['lastUpdate']}',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         color: statusColor,
                                       ),
                                     ),
