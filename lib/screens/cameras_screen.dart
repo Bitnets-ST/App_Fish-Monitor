@@ -91,8 +91,7 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final isSmallScreen = screenSize.width < 360;
+    final isSmallScreen = MediaQuery.of(context).size.width < 360;
 
     return Scaffold(
       body: Container(
@@ -115,80 +114,97 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                 padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                 child: Row(
                   children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 10,
-                            offset: const Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'assets/images/Logo1.png',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                              child: const Icon(
-                                Icons.water_drop,
-                                color: Color(0xFF0F4C75),
-                                size: 24,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                    const SizedBox(width: 15),
-                    const Expanded(
-                      child: Text(
-                        'Cámaras',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Cámaras',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // Central Selection Tabs
+              // Central Selection
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white.withOpacity(0.2),
-                  ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white.withOpacity(0.5),
-                  tabs: _centrals.map((central) => Tab(text: central)).toList(),
+                margin: EdgeInsets.symmetric(horizontal: isSmallScreen ? 16 : 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _centrals.map((central) {
+                    final isSelected = _centrals.indexOf(central) == _tabController.index;
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          _tabController.animateTo(_centrals.indexOf(central));
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: isSelected
+                                ? const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xFF42A5F5),
+                                      Color(0xFF2E86AB),
+                                    ],
+                                  )
+                                : null,
+                            color: isSelected ? null : Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white.withOpacity(0.2)
+                                      : Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  Icons.location_on,
+                                  size: 16,
+                                  color: Colors.white.withOpacity(0.9),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                central,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                  color: Colors.white.withOpacity(isSelected ? 1 : 0.7),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
 
               // Content
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
                   ),
                   child: TabBarView(
                     controller: _tabController,
@@ -273,10 +289,10 @@ class _CamerasScreenState extends State<CamerasScreen> with SingleTickerProvider
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              Text(
+                      Text(
                                 '${(room['cameras'] as List).length} Cámaras • ${room['status']}',
-                                style: TextStyle(
-                                  fontSize: 12,
+                        style: TextStyle(
+                          fontSize: 12,
                                   color: Colors.grey[600],
                                 ),
                               ),

@@ -192,81 +192,99 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                     child: Column(
                       children: [
-                        Stack(
-                          children: [
-                            SizedBox(
-                              height: 90,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
+                        Container(
+                          padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Stack(
                                 children: [
-                                  _buildTotalCard(
-                                    'Total de Peces',
-                                    '1,234',
-                                    Icons.pets,
-                                    const Color(0xFF4CAF50),
-                                    isSmallScreen,
+                                  SizedBox(
+                                    height: 100,
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        _buildTotalCard(
+                                          'Total de Peces',
+                                          '1,234',
+                                          Icons.pets,
+                                          const Color(0xFF4CAF50),
+                                          isSmallScreen,
+                                        ),
+                                        _buildTotalCard(
+                                          'Total de Salas',
+                                          '8',
+                                          Icons.meeting_room,
+                                          const Color(0xFF42A5F5),
+                                          isSmallScreen,
+                                        ),
+                                        _buildTotalCard(
+                                          'Total de Estanques',
+                                          '12',
+                                          Icons.water,
+                                          const Color(0xFFFFA726),
+                                          isSmallScreen,
+                                        ),
+                                        _buildTotalCard(
+                                          'Salas Activas',
+                                          '6',
+                                          Icons.check_circle,
+                                          const Color(0xFFE74C3C),
+                                          isSmallScreen,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  _buildTotalCard(
-                                    'Total de Salas',
-                                    '8',
-                                    Icons.meeting_room,
-                                    const Color(0xFF42A5F5),
-                                    isSmallScreen,
-                                  ),
-                                  _buildTotalCard(
-                                    'Total de Estanques',
-                                    '12',
-                                    Icons.water,
-                                    const Color(0xFFFFA726),
-                                    isSmallScreen,
-                                  ),
-                                  _buildTotalCard(
-                                    'Salas Activas',
-                                    '6',
-                                    Icons.check_circle,
-                                    const Color(0xFFE74C3C),
-                                    isSmallScreen,
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [
+                                            Colors.white.withOpacity(0),
+                                            Colors.white,
+                                          ],
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: AnimatedBuilder(
+                                          animation: _waveController,
+                                          builder: (context, child) {
+                                            return Transform.translate(
+                                              offset: Offset(
+                                                math.sin(_waveAnimation.value) * 4,
+                                                0,
+                                              ),
+                                              child: const Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Color(0xFF0F4C75),
+                                                size: 20,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              bottom: 0,
-                              child: Container(
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Colors.white.withOpacity(0),
-                                      Colors.white,
-                                    ],
-                                  ),
-                                ),
-                                child: Center(
-                                  child: AnimatedBuilder(
-                                    animation: _waveController,
-                                    builder: (context, child) {
-                                      return Transform.translate(
-                                        offset: Offset(
-                                          math.sin(_waveAnimation.value) * 4,
-                                          0,
-                                        ),
-                                        child: const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Color(0xFF0F4C75),
-                                          size: 20,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 20),
                         _buildWelcomeCard(isSmallScreen),
@@ -291,9 +309,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     Color color,
     bool isSmallScreen,
   ) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth * 0.25; // 25% del ancho de la pantalla
+
     return Container(
-      width: 90,
-      margin: const EdgeInsets.only(right: 12),
+      width: cardWidth,
+      margin: EdgeInsets.only(right: screenWidth * 0.02),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -303,12 +324,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             color.withOpacity(0.2),
           ],
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+            color: color.withOpacity(0.15),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -318,39 +339,47 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           onTap: () {
             // TODO: Implementar navegación a detalles
           },
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(screenWidth * 0.03),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(screenWidth * 0.025),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: Colors.white,
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Icon(
                     icon,
                     color: color,
-                    size: 20,
+                    size: screenWidth * 0.05,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: screenWidth * 0.02),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: isSmallScreen ? 14 : 16,
+                    fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: screenWidth * 0.01),
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: isSmallScreen ? 9 : 10,
-                    color: Colors.grey[600],
+                    fontSize: screenWidth * 0.028,
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -366,7 +395,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   Widget _buildWelcomeCard(bool isSmallScreen) {
     return Container(
-      padding: EdgeInsets.all(isSmallScreen ? 20 : 25),
+      padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -387,10 +416,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       ),
       child: Row(
         children: [
-          // Círculo con animación de agua
           Container(
-            width: 60,
-            height: 60,
+            width: 50,
+            height: 50,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: [
@@ -418,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           animation: _waveAnimation.value,
                           color: const Color(0xFF42A5F5),
                         ),
-                        size: const Size(60, 60),
+                        size: const Size(50, 50),
                       );
                     },
                   ),
@@ -427,13 +455,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   child: Icon(
                     Icons.water_drop,
                     color: Colors.white,
-                    size: 30,
+                    size: 24,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 15),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -442,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   'Bienvenido',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -450,7 +478,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   'Estado general del sistema en línea',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
                 ),
               ],
@@ -458,18 +486,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
+              horizontal: 10,
+              vertical: 4,
             ),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: const Text(
               '24/7',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
             ),
           ),

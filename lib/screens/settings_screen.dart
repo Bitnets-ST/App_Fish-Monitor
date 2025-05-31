@@ -5,222 +5,233 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 360;
+
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0A2342),
-        title: const Text(
-          'Configuración',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0F4C75),
+              Color(0xFF2E86AB),
+              Color(0xFF85C1E9),
+            ],
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildSettingsSection(
-              'Preferencias',
-              [
-                _buildSettingsTile(
-                  context,
-                  'Tema',
-                  'Cambiar entre tema claro y oscuro',
-                  Icons.palette,
-                  () {
-                    // TODO: Implementar cambio de tema
-                  },
-                ),
-                _buildSettingsTile(
-                  context,
-                  'Idioma',
-                  'Español',
-                  Icons.language,
-                  () {
-                    // TODO: Implementar cambio de idioma
-                  },
-                ),
-              ],
-            ),
-            _buildSettingsSection(
-              'Notificaciones',
-              [
-                _buildSettingsTile(
-                  context,
-                  'Alertas',
-                  'Configurar notificaciones de alertas',
-                  Icons.notifications,
-                  () {
-                    // TODO: Implementar configuración de alertas
-                  },
-                ),
-                _buildSettingsTile(
-                  context,
-                  'Sonidos',
-                  'Activar/desactivar sonidos',
-                  Icons.volume_up,
-                  () {
-                    // TODO: Implementar configuración de sonidos
-                  },
-                ),
-              ],
-            ),
-            _buildSettingsSection(
-              'Cuenta',
-              [
-                _buildSettingsTile(
-                  context,
-                  'Perfil',
-                  'Editar información personal',
-                  Icons.person,
-                  () {
-                    // TODO: Implementar edición de perfil
-                  },
-                ),
-                _buildSettingsTile(
-                  context,
-                  'Seguridad',
-                  'Cambiar contraseña y configuración de seguridad',
-                  Icons.security,
-                  () {
-                    // TODO: Implementar configuración de seguridad
-                  },
-                ),
-                _buildSettingsTile(
-                  context,
-                  'Cerrar Sesión',
-                  'Salir de la aplicación',
-                  Icons.logout,
-                  () {
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
-                  isDestructive: true,
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Versión 1.0.0',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Header
+              Padding(
+                padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Configuración',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildSettingsSection(String title, List<Widget> children) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF0A2342),
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                spreadRadius: 0,
+              // Settings Content
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSectionTitle('Cuenta'),
+                        _buildSettingItem(
+                          icon: Icons.person_outline,
+                          title: 'Perfil',
+                          subtitle: 'Información personal y preferencias',
+                          onTap: () {},
+                        ),
+                        _buildSettingItem(
+                          icon: Icons.notifications_outlined,
+                          title: 'Notificaciones',
+                          subtitle: 'Configurar alertas y recordatorios',
+                          onTap: () {},
+                        ),
+                        _buildSettingItem(
+                          icon: Icons.security_outlined,
+                          title: 'Seguridad',
+                          subtitle: 'Contraseña y autenticación',
+                          onTap: () {},
+                        ),
+                        const SizedBox(height: 20),
+                        _buildSectionTitle('Preferencias'),
+                        _buildSettingItem(
+                          icon: Icons.language_outlined,
+                          title: 'Idioma',
+                          subtitle: 'Español',
+                          onTap: () {},
+                        ),
+                        _buildSettingItem(
+                          icon: Icons.dark_mode_outlined,
+                          title: 'Tema',
+                          subtitle: 'Claro',
+                          onTap: () {},
+                        ),
+                        _buildSettingItem(
+                          icon: Icons.speed_outlined,
+                          title: 'Unidades',
+                          subtitle: 'Métrico',
+                          onTap: () {},
+                        ),
+                        const SizedBox(height: 20),
+                        _buildSectionTitle('Sistema'),
+                        _buildSettingItem(
+                          icon: Icons.update_outlined,
+                          title: 'Actualizaciones',
+                          subtitle: 'Versión 1.0.0',
+                          onTap: () {},
+                        ),
+                        _buildSettingItem(
+                          icon: Icons.help_outline,
+                          title: 'Ayuda y Soporte',
+                          subtitle: 'FAQ y contacto',
+                          onTap: () {},
+                        ),
+                        _buildSettingItem(
+                          icon: Icons.info_outline,
+                          title: 'Acerca de',
+                          subtitle: 'Información de la aplicación',
+                          onTap: () {},
+                        ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: TextButton(
+                            onPressed: () {
+                              // TODO: Implementar cierre de sesión
+                            },
+                            child: const Text(
+                              'Cerrar Sesión',
+                              style: TextStyle(
+                                color: Color(0xFFE74C3C),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
-          child: Column(
-            children: children,
-          ),
         ),
-      ],
+      ),
     );
   }
 
-  Widget _buildSettingsTile(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    VoidCallback onTap, {
-    bool isDestructive = false,
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Color(0xFF0F4C75),
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.grey.withOpacity(0.1),
-              width: 1,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(15),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0F4C75).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: const Color(0xFF0F4C75),
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF2C3E50),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.chevron_right,
+                  color: Color(0xFF0F4C75),
+                ),
+              ],
             ),
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isDestructive
-                    ? Colors.red.withOpacity(0.1)
-                    : const Color(0xFF0A2342).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                color: isDestructive ? Colors.red : const Color(0xFF0A2342),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: isDestructive ? Colors.red : Colors.black87,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isDestructive
-                          ? Colors.red.withOpacity(0.7)
-                          : Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.chevron_right,
-              color: isDestructive ? Colors.red : Colors.grey[400],
-            ),
-          ],
         ),
       ),
     );
