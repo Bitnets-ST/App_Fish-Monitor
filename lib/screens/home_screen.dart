@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 color: Colors.white,
                               ),
                               child: const Icon(
-                                Icons.water_drop,
+                                Icons.pets,
                                 color: Color(0xFF0F4C75),
                                 size: 24,
                               ),
@@ -192,41 +192,81 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 70,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              _buildTotalCard(
-                                'Total de Peces',
-                                '1,234',
-                                Icons.pets,
-                                const Color(0xFF4CAF50),
-                                isSmallScreen,
+                        Stack(
+                          children: [
+                            SizedBox(
+                              height: 90,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  _buildTotalCard(
+                                    'Total de Peces',
+                                    '1,234',
+                                    Icons.pets,
+                                    const Color(0xFF4CAF50),
+                                    isSmallScreen,
+                                  ),
+                                  _buildTotalCard(
+                                    'Total de Salas',
+                                    '8',
+                                    Icons.meeting_room,
+                                    const Color(0xFF42A5F5),
+                                    isSmallScreen,
+                                  ),
+                                  _buildTotalCard(
+                                    'Total de Estanques',
+                                    '12',
+                                    Icons.water,
+                                    const Color(0xFFFFA726),
+                                    isSmallScreen,
+                                  ),
+                                  _buildTotalCard(
+                                    'Salas Activas',
+                                    '6',
+                                    Icons.check_circle,
+                                    const Color(0xFFE74C3C),
+                                    isSmallScreen,
+                                  ),
+                                ],
                               ),
-                              _buildTotalCard(
-                                'Total de Salas',
-                                '8',
-                                Icons.meeting_room,
-                                const Color(0xFF42A5F5),
-                                isSmallScreen,
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              bottom: 0,
+                              child: Container(
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Colors.white.withOpacity(0),
+                                      Colors.white,
+                                    ],
+                                  ),
+                                ),
+                                child: Center(
+                                  child: AnimatedBuilder(
+                                    animation: _waveController,
+                                    builder: (context, child) {
+                                      return Transform.translate(
+                                        offset: Offset(
+                                          math.sin(_waveAnimation.value) * 4,
+                                          0,
+                                        ),
+                                        child: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Color(0xFF0F4C75),
+                                          size: 20,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
-                              _buildTotalCard(
-                                'Total de Estanques',
-                                '12',
-                                Icons.water,
-                                const Color(0xFFFFA726),
-                                isSmallScreen,
-                              ),
-                              _buildTotalCard(
-                                'Salas Activas',
-                                '6',
-                                Icons.check_circle,
-                                const Color(0xFFE74C3C),
-                                isSmallScreen,
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 20),
                         _buildWelcomeCard(isSmallScreen),
@@ -252,8 +292,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     bool isSmallScreen,
   ) {
     return Container(
-      width: 70,
-      margin: const EdgeInsets.only(right: 8),
+      width: 90,
+      margin: const EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -263,12 +303,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             color.withOpacity(0.2),
           ],
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: color.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -278,14 +318,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           onTap: () {
             // TODO: Implementar navegación a detalles
           },
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           child: Padding(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.1),
                     shape: BoxShape.circle,
@@ -293,23 +333,23 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   child: Icon(
                     icon,
                     color: color,
-                    size: 16,
+                    size: 20,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: isSmallScreen ? 12 : 14,
+                    fontSize: isSmallScreen ? 14 : 16,
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
                 ),
-                const SizedBox(height: 1),
+                const SizedBox(height: 2),
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: isSmallScreen ? 7 : 8,
+                    fontSize: isSmallScreen ? 9 : 10,
                     color: Colors.grey[600],
                   ),
                   textAlign: TextAlign.center,
