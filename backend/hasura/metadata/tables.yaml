@@ -1,0 +1,205 @@
+- name: centrales
+  schema: public
+  array_relationships: []
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - nombre
+          - color
+          - created_at
+          - updated_at
+        filter: {}
+        allow_aggregations: true
+  insert_permissions:
+    - role: admin
+      permission:
+        columns:
+          - nombre
+          - color
+        check: {}
+        backend_only: false
+  update_permissions:
+    - role: admin
+      permission:
+        columns:
+          - nombre
+          - color
+        filter: {}
+        check: {}
+  delete_permissions:
+    - role: admin
+      permission:
+        filter: {}
+
+- name: salas
+  schema: public
+  array_relationships:
+    - name: central
+      using:
+        foreign_key_constraint_on: central_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - central_id
+          - nombre
+          - estado
+          - created_at
+          - updated_at
+        filter: {}
+        allow_aggregations: true
+  insert_permissions:
+    - role: admin
+      permission:
+        columns:
+          - central_id
+          - nombre
+          - estado
+        check: {}
+        backend_only: false
+  update_permissions:
+    - role: admin
+      permission:
+        columns:
+          - nombre
+          - estado
+        filter: {}
+        check: {}
+  delete_permissions:
+    - role: admin
+      permission:
+        filter: {}
+
+- name: estanques
+  schema: public
+  array_relationships:
+    - name: sala
+      using:
+        foreign_key_constraint_on: sala_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - sala_id
+          - nombre
+          - temperatura
+          - oxigeno
+          - ph
+          - estado
+          - created_at
+          - updated_at
+        filter: {}
+        allow_aggregations: true
+  insert_permissions:
+    - role: admin
+      permission:
+        columns:
+          - sala_id
+          - nombre
+          - temperatura
+          - oxigeno
+          - ph
+          - estado
+        check: {}
+        backend_only: false
+  update_permissions:
+    - role: admin
+      permission:
+        columns:
+          - nombre
+          - temperatura
+          - oxigeno
+          - ph
+          - estado
+        filter: {}
+        check: {}
+  delete_permissions:
+    - role: admin
+      permission:
+        filter: {}
+
+- name: usuarios
+  schema: public
+  array_relationships: []
+  select_permissions:
+    - role: admin
+      permission:
+        columns:
+          - id
+          - nombre
+          - email
+          - rol
+          - created_at
+          - updated_at
+        filter: {}
+        allow_aggregations: true
+  insert_permissions:
+    - role: admin
+      permission:
+        columns:
+          - nombre
+          - email
+          - password_hash
+          - rol
+        check: {}
+        backend_only: false
+  update_permissions:
+    - role: admin
+      permission:
+        columns:
+          - nombre
+          - email
+          - password_hash
+          - rol
+        filter: {}
+        check: {}
+  delete_permissions:
+    - role: admin
+      permission:
+        filter: {}
+
+- name: registros_monitoreo
+  schema: public
+  array_relationships:
+    - name: estanque
+      using:
+        foreign_key_constraint_on: estanque_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - estanque_id
+          - temperatura
+          - oxigeno
+          - ph
+          - timestamp
+        filter: {}
+        allow_aggregations: true
+  insert_permissions:
+    - role: admin
+      permission:
+        columns:
+          - estanque_id
+          - temperatura
+          - oxigeno
+          - ph
+        check: {}
+        backend_only: false
+  update_permissions:
+    - role: admin
+      permission:
+        columns:
+          - temperatura
+          - oxigeno
+          - ph
+        filter: {}
+        check: {}
+  delete_permissions:
+    - role: admin
+      permission:
+        filter: {} 
